@@ -11,27 +11,61 @@ let maxAttempts = 25;
 let pruductsNames =[];
 let votes = [];
 let views = [];
+
+
+
 let cont =0;
 let any =[200,200,200];
 
 
+function saveToLocalStorage() {
+
+  let data = JSON.stringify(pruducts);
+  localStorage.setItem('pruducts', data);
+}
+
+function readFromLocalStorage() {
+  let stringObj = localStorage.getItem('pruducts');
+  // console.log(stringObj);
+  let normalObj = JSON.parse(stringObj);
+  console.log(normalObj);
+
+
+  if (normalObj !== null) {
+
+    for (let i=0 ; i<normalObj.length; i++)
+    {
+      pruducts [i].views =normalObj[i].views;
+      pruducts [i].votes =normalObj[i].votes;
+    }
+  }
+  console.log(normalObj);
+
+
+
+}
+
+
+
 function ProductImage(prodName) {
-  //sweater-goat.jpg
-  //['sweater-goat','jpg']
+
   this.pNme = prodName.split('.')[0];
   this.img = 'image/' + prodName;
   this.votes = 0;
   this.views = 0;
   pruductsNames.push(this.pNme);
   pruducts.push(this);
+
 }
 
+
 let pruductsImages = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg','dragon.jpg','pen.jpg','pet-sweep.jpg','scissors.jpg','shark.jpg','sweep.jpg','tauntaun.jpg','unicorn.jpg','water-can.jpg','wine-glass.jpg'];
+
 
 for (let i = 0; i < pruductsImages.length; i++) {
   new ProductImage(pruductsImages[i]);
 }
-console.log(pruducts);
+
 
 function randomIndex() {
 
@@ -64,11 +98,6 @@ function renderRandomImg() {
   }
   any = [leftIndex,middleIndex,rightIndex];
 
-
-  //   while (leftIndex === rightIndex || rightIndex === middleIndex ) {
-  //     leftIndex = randomIndex();
-  //     rightIndex = randomIndex();
-  //   }
 
   leftImgEl.setAttribute('src', pruducts[leftIndex].img);
   middleImgEl.setAttribute('src', pruducts[middleIndex].img);
@@ -107,9 +136,10 @@ function handelClicks(event) {
 
     renderRandomImg();
 
-    console.log(pruducts);
+
   } else {
-    let ulEl = document.getElementById('results');
+    ulEl = document.getElementById('results');
+
     for (let i = 0; i < pruducts.length; i++) {
       let liEl = document.createElement('li');
       liEl.textContent = `${pruducts[i].pNme} has ${pruducts[i].votes} votes and ${pruducts[i].views} views .`;
@@ -117,6 +147,7 @@ function handelClicks(event) {
       votes.push(pruducts[i].votes);
       views.push(pruducts[i].views);
     }
+    saveToLocalStorage();
     leftImgEl.removeEventListener('click', handelClicks);
     middleImgEl.removeEventListener('click', handelClicks);
     rightImgEl.removeEventListener('click', handelClicks);
@@ -162,3 +193,5 @@ function chartRender() {
     }
   });
 }
+readFromLocalStorage();
+
