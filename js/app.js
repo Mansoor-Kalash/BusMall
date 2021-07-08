@@ -17,20 +17,20 @@ let views = [];
 let cont =0;
 let any =[200,200,200];
 
-
+// store the data to local storage.
 function saveToLocalStorage() {
 
   let data = JSON.stringify(pruducts);
   localStorage.setItem('pruducts', data);
 }
-
+// read the data.
 function readFromLocalStorage() {
   let stringObj = localStorage.getItem('pruducts');
   // console.log(stringObj);
   let normalObj = JSON.parse(stringObj);
   console.log(normalObj);
 
-
+  // update the views and votes
   if (normalObj !== null) {
 
     for (let i=0 ; i<normalObj.length; i++)
@@ -44,6 +44,7 @@ function readFromLocalStorage() {
 
 
 }
+
 
 
 
@@ -66,6 +67,7 @@ for (let i = 0; i < pruductsImages.length; i++) {
   new ProductImage(pruductsImages[i]);
 }
 
+// create unique index and no index equal the index from last time.
 
 function randomIndex() {
 
@@ -115,12 +117,13 @@ function renderRandomImg() {
 
 }
 
+
 renderRandomImg();
 
 leftImgEl.addEventListener('click', handelClicks);
 middleImgEl.addEventListener('click', handelClicks);
 rightImgEl.addEventListener('click', handelClicks);
-
+// cont the number of votes and views for each product
 function handelClicks(event) {
   if (attempts <= maxAttempts) {
     let clickedImg = event.target.id;
@@ -137,7 +140,8 @@ function handelClicks(event) {
     renderRandomImg();
 
 
-  } else {
+  }
+  else {// render the list
     ulEl = document.getElementById('results');
 
     for (let i = 0; i < pruducts.length; i++) {
@@ -147,6 +151,7 @@ function handelClicks(event) {
       votes.push(pruducts[i].votes);
       views.push(pruducts[i].views);
     }
+    //add the number of votes and views to the local storage  and remove the event listener
     saveToLocalStorage();
     leftImgEl.removeEventListener('click', handelClicks);
     middleImgEl.removeEventListener('click', handelClicks);
@@ -155,6 +160,7 @@ function handelClicks(event) {
   }
   attempts++;
 }
+// render the chart js
 function chartRender() {
   let ctx = document.getElementById('myChart').getContext('2d');
   let myChart = new Chart(ctx, {
